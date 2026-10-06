@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Controller | Pinoy Karaoke</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pinoy: { red: '#CE1126', blue: '#0038A8', yellow: '#FCD116', dark: '#0f0f1a', card: '#1a1a2e' }
+          },
+          fontFamily: { sans: ['Poppins', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-pinoy-dark text-white font-sans min-h-screen">
+  <!-- Header -->
+  <div class="sticky top-0 z-20 bg-pinoy-dark/95 backdrop-blur border-b border-white/10 px-4 py-3">
+    <div class="flex items-center justify-between">
+      <div>
+        <div class="font-bold text-pinoy-yellow">🎤 Controller</div>
+        <div class="text-xs text-gray-400">Room <span id="roomLabel" class="font-semibold text-white">----</span> · <span id="nickLabel">You</span></div>
+      </div>
+      <div class="text-right">
+        <div id="statusDot" class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1"></div>
+        <span class="text-xs text-gray-400">Connected</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex border-b border-white/10">
+    <button data-tab="search" class="tab-btn flex-1 py-3 text-center font-semibold text-pinoy-yellow border-b-2 border-pinoy-yellow">
+      🔍 Search
+    </button>
+    <button data-tab="queue" class="tab-btn flex-1 py-3 text-center font-semibold text-gray-400 border-b-2 border-transparent">
+      📋 Queue <span id="queueBadge" class="text-xs bg-pinoy-red px-1.5 py-0.5 rounded-full ml-1 hidden">0</span>
+    </button>
+    <button data-tab="popular" class="tab-btn flex-1 py-3 text-center font-semibold text-gray-400 border-b-2 border-transparent">
+      🔥 Popular
+    </button>
+  </div>
+
+  <!-- Search Tab -->
+  <div id="tab-search" class="tab-content p-4">
+    <div class="relative mb-4">
+      <input id="searchInput" type="search" placeholder="Search OPM, ballads, hugot..." 
+             class="w-full bg-pinoy-card border border-white/15 rounded-xl px-4 py-3 pr-12 focus:outline-none focus:border-pinoy-yellow text-base">
+      <button id="searchBtn" class="absolute right-2 top-1/2 -translate-y-1/2 bg-pinoy-red text-white px-3 py-1.5 rounded-lg text-sm font-semibold">
+        Go
+      </button>
+    </div>
+    
+    <p class="text-xs text-gray-500 mb-3">
+      Tip: Add "karaoke" or "videoke" for better results. Uses YouTube.
+    </p>
+
+    <div id="searchResults" class="space-y-2">
+      <p class="text-center text-gray-500 text-sm py-10">Search for a song to get started 🎵</p>
+    </div>
+  </div>
+
+  <!-- Queue Tab -->
+  <div id="tab-queue" class="tab-content p-4 hidden">
+    <div id="nowPlayingCard" class="hidden mb-4 p-3 rounded-xl bg-gradient-to-r from-pinoy-blue/40 to-pinoy-red/40 border border-white/10">
+      <div class="text-xs text-pinoy-yellow font-semibold mb-1">NOW PLAYING</div>
+      <div class="font-bold" id="npTitle">—</div>
+      <div class="text-sm text-gray-300" id="npBy">—</div>
+    </div>
+
+    <div id="queueListCtrl" class="space-y-2">
+      <p class="text-center text-gray-500 text-sm py-10">Queue is empty</p>
+    </div>
+
+    <div class="mt-6 flex gap-2">
+      <button id="skipBtnCtrl" class="btn-secondary flex-1 py-3 text-sm">⏭ Skip Song</button>
+      <button id="playNextBtnCtrl" class="btn-primary flex-1 py-3 text-sm">▶ Play Next</button>
+    </div>
+  </div>
+
+  <!-- Popular Tab -->
+  <div id="tab-popular" class="tab-content p-4 hidden">
+    <p class="text-sm text-gray-400 mb-4">Curated Pinoy karaoke favorites. Tap to add!</p>
+    <div id="popularList" class="space-y-2"></div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-pinoy-yellow text-pinoy-dark px-5 py-2.5 rounded-full font-semibold text-sm opacity-0 transition-opacity duration-300 pointer-events-none z-50">
+    Added to queue!
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/controller.js"></script>
+</body>
+</html>

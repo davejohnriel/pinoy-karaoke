@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player | Pinoy Karaoke</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pinoy: { red: '#CE1126', blue: '#0038A8', yellow: '#FCD116', dark: '#0f0f1a', card: '#1a1a2e' }
+          },
+          fontFamily: { sans: ['Poppins', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-black text-white font-sans overflow-hidden">
+  <div class="player-container">
+    <!-- Top bar -->
+    <div class="flex items-center justify-between px-4 py-2 bg-pinoy-dark/90 border-b border-white/10">
+      <div class="flex items-center gap-3">
+        <span class="text-pinoy-yellow font-bold text-lg">🎤 Pinoy Karaoke</span>
+        <span id="roomBadge" class="px-3 py-0.5 rounded-full bg-pinoy-yellow/20 text-pinoy-yellow text-sm font-semibold">----</span>
+      </div>
+      <div class="flex items-center gap-4 text-sm text-gray-400">
+        <span id="controllerCount">0 controllers</span>
+        <button id="fullscreenBtn" class="hover:text-white transition" title="Fullscreen">⛶</button>
+      </div>
+    </div>
+
+    <!-- Main player area -->
+    <div class="flex-1 flex flex-col md:flex-row">
+      <!-- Video -->
+      <div class="flex-1 relative bg-black flex items-center justify-center">
+        <div id="waitingScreen" class="absolute inset-0 flex flex-col items-center justify-center z-10 bg-gradient-to-b from-pinoy-dark to-black">
+          <div class="text-6xl mb-4 animate-pulse">🎤</div>
+          <h2 class="text-2xl md:text-3xl font-bold mb-2">Waiting for songs...</h2>
+          <p class="text-gray-400 mb-6">Friends can join and queue using the code</p>
+          <div class="text-5xl font-extrabold tracking-widest text-pinoy-yellow" id="bigRoomCode">----</div>
+          <p class="mt-4 text-sm text-gray-500">or scan the QR from the home page</p>
+        </div>
+        
+        <div id="playerWrapper" class="w-full hidden">
+          <div id="youtubePlayer"></div>
+        </div>
+      </div>
+
+      <!-- Sidebar - Queue -->
+      <div class="w-full md:w-80 lg:w-96 bg-pinoy-card border-l border-white/10 flex flex-col max-h-[40vh] md:max-h-none">
+        <div class="p-4 border-b border-white/10">
+          <h3 class="font-bold flex items-center gap-2">
+            <span>📋 Queue</span>
+            <span id="queueCount" class="text-xs bg-white/10 px-2 py-0.5 rounded-full">0</span>
+          </h3>
+        </div>
+        
+        <div id="queueList" class="flex-1 overflow-y-auto p-2 space-y-2">
+          <p class="text-center text-gray-500 text-sm py-8">No songs yet. Add some!</p>
+        </div>
+
+        <div class="p-3 border-t border-white/10 flex gap-2">
+          <button id="skipBtn" class="btn-secondary flex-1 py-2 text-sm">⏭ Skip</button>
+          <button id="playNextBtn" class="btn-primary flex-1 py-2 text-sm">▶ Play Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Now playing bar -->
+    <div id="nowPlayingBar" class="hidden bg-gradient-to-r from-pinoy-blue to-pinoy-red px-4 py-3">
+      <div class="flex items-center gap-3">
+        <img id="nowThumb" src="" class="w-12 h-12 rounded object-cover" alt="">
+        <div class="flex-1 min-w-0">
+          <div class="font-bold truncate" id="nowTitle">—</div>
+          <div class="text-sm text-white/80 truncate">
+            Requested by <span id="nowRequester">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Score Overlay -->
+  <div id="scoreOverlay" class="score-overlay">
+    <div class="score-box">
+      <div class="text-xl text-gray-300 mb-2">Your Score</div>
+      <div class="score-number" id="scoreValue">0</div>
+      <div class="text-3xl font-bold mt-2" id="scoreRating">GREAT</div>
+      <div class="text-xl text-pinoy-yellow mt-3" id="scoreMessage">Ang galing!</div>
+      <div class="text-sm text-gray-400 mt-6">Next song starting soon...</div>
+    </div>
+  </div>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/player.js"></script>
+</body>
+</html>

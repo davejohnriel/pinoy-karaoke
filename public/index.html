@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pinoy Karaoke 🎤 | Videoke Online</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pinoy: {
+              red: '#CE1126',
+              blue: '#0038A8',
+              yellow: '#FCD116',
+              dark: '#0f0f1a',
+              card: '#1a1a2e'
+            }
+          },
+          fontFamily: {
+            sans: ['Poppins', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-pinoy-dark text-white min-h-screen font-sans">
+  <!-- Hero -->
+  <div class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-pinoy-blue/40 via-pinoy-dark to-pinoy-red/30"></div>
+    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 50%, #FCD116 0%, transparent 40%), radial-gradient(circle at 80% 20%, #CE1126 0%, transparent 35%);"></div>
+    
+    <div class="relative max-w-5xl mx-auto px-4 py-16 md:py-24 text-center">
+      <div class="inline-block mb-4 px-4 py-1.5 rounded-full bg-pinoy-yellow/20 border border-pinoy-yellow/40 text-pinoy-yellow text-sm font-semibold">
+        🇵🇭 Pinoy Style Videoke
+      </div>
+      
+      <h1 class="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight">
+        <span class="text-white">Pinoy</span>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-pinoy-yellow via-white to-pinoy-red">Karaoke</span>
+      </h1>
+      
+      <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10">
+        Barkada nights, birthday parties, inuman — <br class="hidden md:block">
+        the ultimate free videoke experience. Queue from your phone, sing on the big screen.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <button id="createRoomBtn" class="btn-primary text-lg px-8 py-4">
+          🎤 Create Room
+        </button>
+        <button id="joinRoomBtn" class="btn-secondary text-lg px-8 py-4">
+          Join with Code
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <div class="max-w-5xl mx-auto px-4 py-16">
+    <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">Perfect for every <span class="text-pinoy-yellow">kantahan</span></h2>
+    
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="card p-6">
+        <div class="text-4xl mb-3">📱</div>
+        <h3 class="text-xl font-bold mb-2">Phone as Remote</h3>
+        <p class="text-gray-400 text-sm">Scan QR or enter code. Everyone queues songs from their own phone — no app download needed.</p>
+      </div>
+      <div class="card p-6">
+        <div class="text-4xl mb-3">📺</div>
+        <h3 class="text-xl font-bold mb-2">Big Screen Player</h3>
+        <p class="text-gray-400 text-sm">Open the player on your TV, laptop, or projector. Lyrics and video ready for the stage.</p>
+      </div>
+      <div class="card p-6">
+        <div class="text-4xl mb-3">🏆</div>
+        <h3 class="text-xl font-bold mb-2">Pinoy Scoring</h3>
+        <p class="text-gray-400 text-sm">Get classic videoke scores with fun Tagalog reactions. Compete with your barkada!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="bg-pinoy-card/50 py-16">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-2xl md:text-3xl font-bold text-center mb-10">How it works</h2>
+      <div class="grid md:grid-cols-4 gap-6 text-center">
+        <div>
+          <div class="w-12 h-12 rounded-full bg-pinoy-red flex items-center justify-center text-xl font-bold mx-auto mb-3">1</div>
+          <p class="font-semibold">Create a Room</p>
+          <p class="text-sm text-gray-400 mt-1">Get a code + QR</p>
+        </div>
+        <div>
+          <div class="w-12 h-12 rounded-full bg-pinoy-blue flex items-center justify-center text-xl font-bold mx-auto mb-3">2</div>
+          <p class="font-semibold">Open Player</p>
+          <p class="text-sm text-gray-400 mt-1">On TV / laptop</p>
+        </div>
+        <div>
+          <div class="w-12 h-12 rounded-full bg-pinoy-yellow text-pinoy-dark flex items-center justify-center text-xl font-bold mx-auto mb-3">3</div>
+          <p class="font-semibold">Friends Join</p>
+          <p class="text-sm text-gray-400 mt-1">Scan & queue songs</p>
+        </div>
+        <div>
+          <div class="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-xl font-bold mx-auto mb-3">4</div>
+          <p class="font-semibold">Kanta na!</p>
+          <p class="text-sm text-gray-400 mt-1">Sing & score</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Room Modal -->
+  <div id="createModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-4">
+    <div class="bg-pinoy-card rounded-2xl max-w-md w-full p-6 md:p-8 border border-white/10 shadow-2xl">
+      <h2 class="text-2xl font-bold mb-2">Room Created! 🎉</h2>
+      <p class="text-gray-400 mb-6">Share this code or QR with your barkada</p>
+      
+      <div class="text-center mb-6">
+        <div id="roomCodeDisplay" class="text-5xl font-extrabold tracking-widest text-pinoy-yellow mb-4">----</div>
+        <img id="qrCodeImg" src="" alt="QR Code" class="mx-auto rounded-lg bg-white p-2 max-w-[220px]">
+      </div>
+
+      <div class="space-y-3">
+        <a id="openPlayerBtn" href="#" class="btn-primary w-full block text-center py-3">
+          📺 Open Player (Big Screen)
+        </a>
+        <a id="openControllerBtn" href="#" class="btn-secondary w-full block text-center py-3">
+          📱 Open Controller (Phone)
+        </a>
+        <button id="copyCodeBtn" class="w-full py-2 text-sm text-gray-400 hover:text-white transition">
+          📋 Copy Room Code
+        </button>
+      </div>
+      
+      <button id="closeCreateModal" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+    </div>
+  </div>
+
+  <!-- Join Modal -->
+  <div id="joinModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 p-4">
+    <div class="bg-pinoy-card rounded-2xl max-w-md w-full p-6 md:p-8 border border-white/10 shadow-2xl relative">
+      <h2 class="text-2xl font-bold mb-6">Join a Room</h2>
+      
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm text-gray-400 mb-1">Room Code</label>
+          <input id="joinCodeInput" type="text" maxlength="5" placeholder="ABC12" 
+                 class="w-full bg-pinoy-dark border border-white/20 rounded-xl px-4 py-3 text-2xl font-bold tracking-widest text-center uppercase focus:outline-none focus:border-pinoy-yellow">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-400 mb-1">Your Nickname</label>
+          <input id="nicknameInput" type="text" maxlength="20" placeholder="e.g. Juan, Ate Mae"
+                 class="w-full bg-pinoy-dark border border-white/20 rounded-xl px-4 py-3 focus:outline-none focus:border-pinoy-yellow">
+        </div>
+        
+        <div class="grid grid-cols-2 gap-3 pt-2">
+          <button id="joinAsPlayer" class="btn-primary py-3">
+            📺 Player
+          </button>
+          <button id="joinAsController" class="btn-secondary py-3">
+            📱 Controller
+          </button>
+        </div>
+      </div>
+      
+      <button id="closeJoinModal" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+    </div>
+  </div>
+
+  <footer class="text-center py-8 text-gray-500 text-sm">
+    Made with ❤️ for every Pinoy who loves to kanta · Free to use
+  </footer>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/home.js"></script>
+</body>
+</html>

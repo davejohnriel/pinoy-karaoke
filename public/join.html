@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join Room | Pinoy Karaoke</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pinoy: { red: '#CE1126', blue: '#0038A8', yellow: '#FCD116', dark: '#0f0f1a', card: '#1a1a2e' }
+          },
+          fontFamily: { sans: ['Poppins', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-pinoy-dark text-white font-sans min-h-screen flex items-center justify-center p-4">
+  <div class="bg-pinoy-card rounded-2xl max-w-md w-full p-6 md:p-8 border border-white/10 shadow-2xl">
+    <div class="text-center mb-6">
+      <div class="text-4xl mb-2">🎤</div>
+      <h1 class="text-2xl font-bold">Join Karaoke Room</h1>
+      <p class="text-gray-400 mt-1">Room <span id="roomCode" class="text-pinoy-yellow font-bold">----</span></p>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm text-gray-400 mb-1">Your Nickname</label>
+        <input id="nickname" type="text" maxlength="20" placeholder="e.g. Juan, Kuya J, Ate Mae"
+               class="w-full bg-pinoy-dark border border-white/20 rounded-xl px-4 py-3 focus:outline-none focus:border-pinoy-yellow">
+      </div>
+
+      <button id="joinCtrl" class="btn-primary w-full py-3.5 text-lg">
+        📱 Join as Controller
+      </button>
+      
+      <button id="joinPlayer" class="btn-secondary w-full py-3">
+        📺 Open as Player (Big Screen)
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const room = (params.get('room') || '').toUpperCase();
+    
+    if (!room) {
+      window.location.href = '/';
+    }
+    
+    document.getElementById('roomCode').textContent = room;
+    
+    const saved = localStorage.getItem('pk_nickname');
+    if (saved) document.getElementById('nickname').value = saved;
+
+    document.getElementById('joinCtrl').addEventListener('click', () => {
+      const name = document.getElementById('nickname').value.trim() || 'Singer';
+      localStorage.setItem('pk_nickname', name);
+      window.location.href = `/controller.html?room=${room}&name=${encodeURIComponent(name)}`;
+    });
+
+    document.getElementById('joinPlayer').addEventListener('click', () => {
+      window.location.href = `/player.html?room=${room}`;
+    });
+  </script>
+</body>
+</html>
