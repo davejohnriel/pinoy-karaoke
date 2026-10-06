@@ -46,8 +46,11 @@
           <p class="mt-4 text-sm text-gray-500">or scan the QR from the home page</p>
         </div>
         
-        <div id="playerWrapper" class="w-full hidden">
-          <div id="youtubePlayer"></div>
+        <div id="playerWrapper" class="w-full hidden relative">
+          <div id="youtubePlayer" class="w-full" style="aspect-ratio:16/9; min-height:240px;"></div>
+          <div id="playerError" class="hidden absolute inset-0 flex items-center justify-center bg-black/80 text-center p-6 z-20">
+            <p class="text-red-400 text-lg font-semibold"></p>
+          </div>
         </div>
       </div>
 
