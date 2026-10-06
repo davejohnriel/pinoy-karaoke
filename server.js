@@ -154,6 +154,11 @@ io.on('connection', (socket) => {
       queue: room.queue,
       added: queueItem
     });
+
+    // Auto-start if nothing is currently playing
+    if (!room.isPlaying && !room.currentSong) {
+      playNext(room, socket.roomCode);
+    }
   });
 
   socket.on('remove-from-queue', ({ songId }) => {
