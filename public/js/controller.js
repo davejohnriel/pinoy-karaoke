@@ -70,41 +70,54 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   });
 });
 
-// === Popular OPM Karaoke (curated real YouTube videos) ===
-const POPULAR_SONGS = [
-  { title: "Huling El Bimbo", artist: "Eraserheads", videoId: "4fndeDfaWCg", thumbnail: "https://i.ytimg.com/vi/4fndeDfaWCg/mqdefault.jpg" },
-  { title: "With A Smile", artist: "Eraserheads", videoId: "N5EnuHptaL8", thumbnail: "https://i.ytimg.com/vi/N5EnuHptaL8/mqdefault.jpg" },
-  { title: "Ang Huling El Bimbo (Karaoke)", artist: "Eraserheads", videoId: "h--eFOT4o7Q", thumbnail: "https://i.ytimg.com/vi/h--eFOT4o7Q/mqdefault.jpg" },
-  { title: "Pare Ko", artist: "Eraserheads", videoId: "9bZkp7q19f0", thumbnail: "https://i.ytimg.com/vi/9bZkp7q19f0/mqdefault.jpg" },
-  { title: "Tala", artist: "Sarah Geronimo", videoId: "3JZ_D3ELwOQ", thumbnail: "https://i.ytimg.com/vi/3JZ_D3ELwOQ/mqdefault.jpg" },
-  { title: "Bakit Ba Ikaw", artist: "Michael Pangilinan", videoId: "RBumgq5yVrA", thumbnail: "https://i.ytimg.com/vi/RBumgq5yVrA/mqdefault.jpg" },
-  { title: "Ikaw", artist: "Yeng Constantino", videoId: "YQHsXMglC9A", thumbnail: "https://i.ytimg.com/vi/YQHsXMglC9A/mqdefault.jpg" },
-  { title: "Buwan", artist: "Sabrina", videoId: "fJ9rUzIMcZQ", thumbnail: "https://i.ytimg.com/vi/fJ9rUzIMcZQ/mqdefault.jpg" },
-  { title: "Leaves", artist: "Ben&Ben", videoId: "hTWKbfoikeg", thumbnail: "https://i.ytimg.com/vi/hTWKbfoikeg/mqdefault.jpg" },
-  { title: "Kathang Isip", artist: "Ben&Ben", videoId: "RgKAFK5djSk", thumbnail: "https://i.ytimg.com/vi/RgKAFK5djSk/mqdefault.jpg" },
-  { title: "Sa Susunod na Habang Buhay", artist: "Ben&Ben", videoId: "OPf0YbXqDm0", thumbnail: "https://i.ytimg.com/vi/OPf0YbXqDm0/mqdefault.jpg" },
-  { title: "Pagsamo", artist: "Arthur Nery", videoId: "fKopy74weus", thumbnail: "https://i.ytimg.com/vi/fKopy74weus/mqdefault.jpg" },
-  { title: "Isa Lang", artist: "Arthur Nery", videoId: "JGwWNGJdvx8", thumbnail: "https://i.ytimg.com/vi/JGwWNGJdvx8/mqdefault.jpg" },
-  { title: "Multo", artist: "Cup of Joe", videoId: "kJQP7kiw5Fk", thumbnail: "https://i.ytimg.com/vi/kJQP7kiw5Fk/mqdefault.jpg" },
-  { title: "Miss Miss", artist: "Rob Deniel", videoId: "9bZkp7q19f0", thumbnail: "https://i.ytimg.com/vi/9bZkp7q19f0/mqdefault.jpg" },
-  { title: "Habang Buhay", artist: "Zack Tabudlo", videoId: "hT_nvWreIhg", thumbnail: "https://i.ytimg.com/vi/hT_nvWreIhg/mqdefault.jpg" },
-  { title: "Give Me Your Forever", artist: "Zack Tabudlo", videoId: "YykjpeuMNEk", thumbnail: "https://i.ytimg.com/vi/YykjpeuMNEk/mqdefault.jpg" },
-  { title: "Binibini", artist: "Zack Tabudlo", videoId: "60ItHLz5WEA", thumbnail: "https://i.ytimg.com/vi/60ItHLz5WEA/mqdefault.jpg" },
-  { title: "Raining In Manila", artist: "Lola Amour", videoId: "09R8_2nJtjg", thumbnail: "https://i.ytimg.com/vi/09R8_2nJtjg/mqdefault.jpg" },
-  { title: "Pano", artist: "Zack Tabudlo", videoId: "fLexgOxsZu0", thumbnail: "https://i.ytimg.com/vi/fLexgOxsZu0/mqdefault.jpg" },
-  { title: "Hanggang Kailan", artist: "Orange & Lemons", videoId: "hLQl3WQQoQ0", thumbnail: "https://i.ytimg.com/vi/hLQl3WQQoQ0/mqdefault.jpg" },
-  { title: "Ligaya", artist: "Eraserheads", videoId: "YQHsXMglC9A", thumbnail: "https://i.ytimg.com/vi/YQHsXMglC9A/mqdefault.jpg" },
-  { title: "Toyang", artist: "Eraserheads", videoId: "kXYiU_JCYtU", thumbnail: "https://i.ytimg.com/vi/kXYiU_JCYtU/mqdefault.jpg" },
-  { title: "Magasin", artist: "Eraserheads", videoId: "e-ORhEE9VVg", thumbnail: "https://i.ytimg.com/vi/e-ORhEE9VVg/mqdefault.jpg" }
+// Popular suggestions (these are search tips — best results come from pasting real karaoke YouTube links)
+const POPULAR_SEARCHES = [
+  "Huling El Bimbo karaoke",
+  "With A Smile karaoke Eraserheads",
+  "Tala Sarah Geronimo karaoke",
+  "Buwan Sabrina karaoke",
+  "Kathang Isip Ben&Ben karaoke",
+  "Pagsamo Arthur Nery karaoke",
+  "Isa Lang Arthur Nery karaoke",
+  "Multo Cup of Joe karaoke",
+  "Miss Miss Rob Deniel karaoke",
+  "Habang Buhay Zack Tabudlo karaoke",
+  "Binibini Zack Tabudlo karaoke",
+  "Raining In Manila karaoke",
+  "Pano Zack Tabudlo karaoke",
+  "Pare Ko Eraserheads karaoke",
+  "Leaves Ben&Ben karaoke"
 ];
-
-// Note: Some videoIds above are placeholders/popular tracks. 
-// In real use, replace with actual karaoke versions found on YouTube.
 
 function renderPopular() {
   const list = document.getElementById('popularList');
-  list.innerHTML = POPULAR_SONGS.map(song => songCardHTML(song, true)).join('');
-  attachAddListeners(list);
+  list.innerHTML = `
+    <div class="p-4 rounded-xl bg-pinoy-yellow/10 border border-pinoy-yellow/30 mb-4">
+      <p class="font-bold text-pinoy-yellow mb-1">⭐ Best way to add songs</p>
+      <p class="text-sm text-gray-300">
+        1. Open YouTube on your phone<br>
+        2. Search: <strong>song name + karaoke</strong><br>
+        3. Copy the video link<br>
+        4. Paste it in the <strong>Search</strong> tab and tap Go
+      </p>
+    </div>
+    <p class="text-xs text-gray-500 mb-2">Quick search ideas (copy → paste in Search):</p>
+    ${POPULAR_SEARCHES.map(q => `
+      <button class="search-idea w-full text-left p-3 mb-2 rounded-xl bg-pinoy-card border border-white/5 active:bg-white/10 text-sm">
+        🔍 ${escapeHtml(q)}
+      </button>
+    `).join('')}
+  `;
+
+  list.querySelectorAll('.search-idea').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const q = btn.textContent.replace('🔍', '').trim();
+      // Switch to search tab and fill
+      document.querySelector('[data-tab="search"]').click();
+      document.getElementById('searchInput').value = q;
+      document.getElementById('searchInput').focus();
+    });
+  });
 }
 
 function songCardHTML(song, isPopular = false) {
