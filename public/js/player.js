@@ -15,6 +15,7 @@ const socket = io();
 let ytPlayer = null;
 let currentVideoId = null;
 let isPlayerReady = false;
+let pendingSong = null; // song waiting for player to be ready
 
 // Join as player
 socket.emit('join-room', {
@@ -52,17 +53,19 @@ socket.on('show-score', (data) => {
 });
 
 socket.on('user-joined', (data) => {
-  document.getElementById('controllerCount').textContent = 
+  document.getElementById('controllerCount').textContent =
     `${data.controllerCount} controller${data.controllerCount !== 1 ? 's' : ''}`;
 });
 
 socket.on('user-left', (data) => {
-  document.getElementById('controllerCount').textContent = 
+  document.getElementById('controllerCount').textContent =
     `${data.controllerCount} controller${data.controllerCount !== 1 ? 's' : ''}`;
 });
 
-// YouTube API
-function onYouTubeIframeAPIReady() {
+// ---- YouTube Player (robust init) ----
+function createPlayer() {
+  if (ytPlayer) return;
+
   ytPlayer = new YT.Player('youtubePlayer', {
     height: '100%',
     width: '100%',
@@ -71,31 +74,82 @@ function onYouTubeIframeAPIReady() {
       controls: 1,
       rel: 0,
       modestbranding: 1,
-      fs: 1
+      fs: 1,
+      playsinline: 1,
+      origin: window.location.origin
     },
     events: {
-      onReady: () => { isPlayerReady = true; },
-      onStateChange: onPlayerStateChange
+      onReady: () => {
+        isPlayerReady = true;
+        console.log('YouTube player ready');
+        if (pendingSong) {
+          loadAndPlay(pendingSong);
+          pendingSong = null;
+        }
+      },
+      onStateChange: onPlayerStateChange,
+      onError: (event) => {
+        console.error('YouTube error code:', event.data);
+        // 2 = invalid id, 5 = html5 error, 100 = not found, 101/150 = embed not allowed
+        const box = document.getElementById('playerError');
+        if (box) {
+          const p = box.querySelector('p') || box;
+          p.textContent = 'This video cannot be played (blocked or invalid). Try another karaoke link.';
+          box.classList.remove('hidden');
+        }
+        // Skip to next after a short delay
+        setTimeout(() => socket.emit('skip-song'), 3000);
+      }
     }
   });
 }
 
-// Make sure API callback is global
+function onYouTubeIframeAPIReady() {
+  createPlayer();
+}
 window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+
+// In case the API loaded before our script
+if (typeof YT !== 'undefined' && YT.Player) {
+  createPlayer();
+}
 
 function onPlayerStateChange(event) {
   if (event.data === YT.PlayerState.ENDED) {
     socket.emit('song-ended');
   }
+  // Hide error when a video starts playing
+  if (event.data === YT.PlayerState.PLAYING) {
+    const msg = document.getElementById('playerError');
+    if (msg) msg.classList.add('hidden');
+  }
+}
+
+function loadAndPlay(song) {
+  if (!ytPlayer || !isPlayerReady) return;
+  try {
+    ytPlayer.loadVideoById({
+      videoId: song.videoId,
+      startSeconds: 0
+    });
+    // Some browsers need an explicit play
+    setTimeout(() => {
+      try { ytPlayer.playVideo(); } catch (e) {}
+    }, 400);
+  } catch (e) {
+    console.error('loadVideoById failed', e);
+  }
 }
 
 function playSong(song) {
+  if (!song || !song.videoId) return;
+
   currentVideoId = song.videoId;
-  
+
   document.getElementById('waitingScreen').classList.add('hidden');
   document.getElementById('playerWrapper').classList.remove('hidden');
   document.getElementById('nowPlayingBar').classList.remove('hidden');
-  
+
   document.getElementById('nowTitle').textContent = song.title;
   document.getElementById('nowRequester').textContent = song.requestedBy || 'Someone';
   if (song.thumbnail) {
@@ -103,15 +157,13 @@ function playSong(song) {
   }
 
   if (isPlayerReady && ytPlayer) {
-    ytPlayer.loadVideoById(song.videoId);
+    loadAndPlay(song);
   } else {
-    // Wait a bit for player
-    const check = setInterval(() => {
-      if (isPlayerReady && ytPlayer) {
-        ytPlayer.loadVideoById(song.videoId);
-        clearInterval(check);
-      }
-    }, 300);
+    pendingSong = song;
+    // Try creating player again if API is already there
+    if (typeof YT !== 'undefined' && YT.Player && !ytPlayer) {
+      createPlayer();
+    }
   }
 }
 
@@ -119,8 +171,10 @@ function showWaiting() {
   document.getElementById('waitingScreen').classList.remove('hidden');
   document.getElementById('playerWrapper').classList.add('hidden');
   document.getElementById('nowPlayingBar').classList.add('hidden');
+  const msg = document.getElementById('playerError');
+  if (msg) msg.classList.add('hidden');
   if (ytPlayer && isPlayerReady) {
-    ytPlayer.stopVideo();
+    try { ytPlayer.stopVideo(); } catch (e) {}
   }
 }
 
